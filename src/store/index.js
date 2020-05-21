@@ -20,12 +20,14 @@ export default new Vuex.Store({
         },
         updateNote(state, {id, title, todos}) {
             const notes = state.notes.concat()
-            const indx = notes.find(n => n.id === id)
+            const indx = notes.findIndex(n => n.id === id)
             const note = notes[indx]
 
             notes[indx] = {...note, title, todos}
 
             localStorage.setItem('notes', JSON.stringify(state.notes))
+
+            console.log(notes[indx])
         }
     },
     actions: {

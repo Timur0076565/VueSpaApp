@@ -28,7 +28,7 @@
               class="notes__btn-chenge"
               :to="'/create/' + note.id"
               active-class="active"
-            >Chenge</router-link>
+            >Change</router-link>
             <button 
               class="notes__btn-delete"
               @click="openaskDelete(note)"
@@ -71,7 +71,6 @@ export default {
   },
   methods: {
     deleteItem(note) {
-        console.log(note)
       this.$store.dispatch('deleteNote', note);
       // this.notes.slice(this.notes.indexOf(id), 1);
       this.showDelete = false;
@@ -81,10 +80,12 @@ export default {
     },
     openaskDelete(id) {
       this.itemId = id;
-      this.showDelete = true
-      
+      this.showDelete = true;
     }
 
+  },
+  mounted() {
+    console.log(this.notes);
   },
 }
 </script>

@@ -8,7 +8,7 @@
                     v-else   
                     class="btn-save" 
                 >
-                Chenge
+                Change
                 </p>
                 <!-- <router-link 
                     teg="button" 

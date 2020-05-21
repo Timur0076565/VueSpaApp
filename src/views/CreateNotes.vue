@@ -5,7 +5,6 @@
       :noteById="noteById"
     />
     <div class="wrapper">
-      <!-- <form class="add-todo__form"> -->
         <div 
           class="add-todo__overflow" 
           v-if="noteById == undefined"
@@ -60,10 +59,14 @@
         >
           <div 
             class="todos__item"
-            
-          >
+            :class="{complete: todo.complete}"
+            >
             <input class="todos__input-checkbox" type="checkbox" v-model="todo.complete">
             <p class="todos__text">{{todo.text}}</p>
+            <button 
+              class="edit" 
+              @click="editTodo(todo)"  
+            >Edit text</button>
             <button 
               class="todos__delete"
               @click="deleteTodo(todo)"  
@@ -93,21 +96,51 @@
             >+</button>
           </div>
         </div>
+        <div class="add-todo__overflow" v-show="openEditTodo">
+          <div class="add-todo__modal">
+            <input 
+              type="text" 
+              class="add-todo__input" 
+              required 
+              placeholder="Edit todo"
+              v-model="todoText"
+              @keyup.enter="AddEditTodo(todoText, editedTodo)"
+            >
+            <button 
+              class="btn-add-todo__create"
+              @click="AddEditTodo(todoText, editedTodo)"
+            >+</button>
+          </div>
+        </div>
         <div class="note-chenge__btns" v-if="noteById != undefined">
           <button 
               class="note-chenge__btn-save notes__btn-chenge"
-              @click="ChengeNote()"   
+              @click="ChangeNote()"   
           >
           Save
           </button>
           <button 
               class="note-chenge__btn-cancel notes__btn-chenge"
-              @click="cancelChengeNote()"  
+              @click="openCancelEdit = true"  
           >
           Cancel
           </button>
+          <div class="add-todo__overflow" v-show="openCancelEdit">
+            <div class="add-todo__modal">
+              <h2>Cancel editing?</h2>
+              <div class="item-delete__answer">
+                  <button 
+                      @click="cancelChangeNote()"
+                      class="item-delete__yes"
+                  >Yes</button>
+                  <button 
+                      @click="openCancelEdit = false"
+                      class="item-delete__no"
+                  >No</button> 
+              </div>  
+            </div>         
+          </div>
         </div>
-      <!-- </form> -->
     </div>
   </div>
 </template>
@@ -129,7 +162,10 @@ export default {
       todos: [],    
       note: {},
       openTodo: false,
+      openEditTodo: false,
       openAddTitle: false,
+      openCancelEdit: false,
+      editedTodo: null,
     }
   },
   computed: {
@@ -148,31 +184,47 @@ export default {
       this.$router.push('/')
     },
     addToTitle() {
-      this.title
+      this.title 
       this.openAddTitle = false
-      console.log(this.openAddTitle)
+      // console.log(this.openAddTitle)
     },
     addTodo() {
+      if(this.todoText != ''){
       this.todos.push({
         text: this.todoText,
         complete: false,
         id: new Date().valueOf()           
-      });
+      });}
       this.todoText = ''
       this.openTodo = false
     },
     deleteTodo(todo) {
       this.todos.splice(this.todos.indexOf(todo), 1);
     },
-    ChengeNote(){
+    editTodo(todo) {
+      this.openEditTodo = true;
+      this.todoText = todo.text;
+      this.editedTodo = todo;
+    },
+    AddEditTodo(todoText, editedTodo) {
+      editedTodo.text = todoText.trim();
+      if(!editedTodo.text) {
+        this.deleteTodo(editedTodo)
+      }
+      this.openEditTodo = false;
+      this.todoText = ''
+    },
+    ChangeNote(){
       this.$store.dispatch('updateNote', {
         id: this.note.id,
         title: this.title,
         todos: this.todos
       })
       this.$router.push('/')
+      // console.log(this.note.id)
     },
-    cancelChengeNote(){
+    cancelChangeNote(){
+      
       this.$router.push('/')
     },
   },
@@ -180,11 +232,11 @@ export default {
     if (this.noteById != undefined && this.noteById != '') {
       this.title = this.noteById.title;
       this.todos = this.noteById.todos;
+      this.note.id = this.noteById.id
     }
     if (this.title == '') {
       this.openAddTitle = true
     }
-    console.log(this.noteById)
   },
 }
 </script>
@@ -208,6 +260,17 @@ export default {
     border-radius: 5px;
     width: 99%;
     margin-bottom: 5px;
+    cursor: pointer;
+  }
+  .edit {
+    margin-left: auto;
+    background: #44AF7C;
+    border: none;
+    outline: none;
+    color: #fff;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
   }
   .todos__text {
     padding: 5px 5px 0 5px;
@@ -220,8 +283,14 @@ export default {
     margin: 0;
     cursor: pointer;
   }
+  .complete{
+    background-color: #447965;
+  }
+  .complete .todos__text {
+    text-decoration: line-through;
+  }
   .todos__delete {
-    margin-left: auto;
+    margin-left: 10px;
     background: rgb(199, 44, 44);
     border: none;
     outline: none;
@@ -286,6 +355,9 @@ export default {
     align-items: center;
     padding: 15px;
     border-radius: 5px;
+  }
+  .add-todo__modal h2{
+    color: #fff;
   }
   .add-todo__title {
     font-size: 16px;
