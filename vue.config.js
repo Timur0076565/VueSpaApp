@@ -3,6 +3,3 @@ module.exports = {
       ? '/VueSpaApp/'
       : '/'
   }
-// module.exports = {
-//   publicPath: '/VueSpaApp/'
-// }
