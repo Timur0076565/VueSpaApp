@@ -60,12 +60,17 @@
           <div 
             class="todos__item"
             :class="{complete: todo.complete}"
-            >
+          >
             <input class="todos__input-checkbox" type="checkbox" v-model="todo.complete">
-            <p class="todos__text">{{todo.text}}</p>
+            <p class="todos__text">{{todo.text | limitedLenTodoCreate}}</p>
             <button 
-              class="edit" 
-              @click="editTodo(todo)"  
+              v-if="todo.complete"
+              class="editPrevent"  
+            >Edit text</button>
+            <button 
+              v-else
+              class="edit"   
+              @click="editTodo(todo)"
             >Edit text</button>
             <button 
               class="todos__delete"
@@ -173,6 +178,11 @@ export default {
       return this.$store.getters.noteId(+this.$route.params.id);
     }
   },
+  filters: {
+    limitedLenTodoCreate: function(value) {
+       return value.slice(0, 135);
+    } 
+  },
   methods: {
     saveItemNote() {
       this.note = {
@@ -186,15 +196,15 @@ export default {
     addToTitle() {
       this.title 
       this.openAddTitle = false
-      // console.log(this.openAddTitle)
     },
     addTodo() {
       if(this.todoText != ''){
-      this.todos.push({
-        text: this.todoText,
-        complete: false,
-        id: new Date().valueOf()           
-      });}
+        this.todos.push({
+          text: this.todoText,
+          complete: false,
+          id: new Date().valueOf()           
+        })
+      }
       this.todoText = ''
       this.openTodo = false
     },
@@ -221,7 +231,6 @@ export default {
         todos: this.todos
       })
       this.$router.push('/')
-      // console.log(this.note.id)
     },
     cancelChangeNote(){
       
@@ -272,6 +281,16 @@ export default {
     padding: 5px 10px;
     cursor: pointer;
   }
+  .complete .editPrevent {
+    background: rgb(116, 116, 116);
+    margin-left: auto;
+    border: none;
+    outline: none;
+    color: #fff;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
   .todos__text {
     padding: 5px 5px 0 5px;
     margin: 0;
@@ -284,7 +303,7 @@ export default {
     cursor: pointer;
   }
   .complete{
-    background-color: #447965;
+    background-color: #44AF7C;
   }
   .complete .todos__text {
     text-decoration: line-through;

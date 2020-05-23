@@ -17,10 +17,11 @@
               <hr>
               <div 
                 class="notes__todos"
-                v-for="todo in note.todos"
+                v-for="todo in note.todos.slice(0, 3)"
                 :key="todo.id"
+                :class="{completed: todo.complete}"
               >
-                <p>{{todo.text}}</p>
+                <p>{{todo.text | limitedLenTodo}}</p>
               </div>
             </div>
             <router-link 
@@ -68,11 +69,16 @@ export default {
     notes() {
       return this.$store.getters.notes
     }
+    
+  },
+  filters: {
+    limitedLenTodo: function(value) {
+       return value.slice(0, 30);
+    } 
   },
   methods: {
     deleteItem(note) {
       this.$store.dispatch('deleteNote', note);
-      // this.notes.slice(this.notes.indexOf(id), 1);
       this.showDelete = false;
     },
     cancelDelete() {
@@ -81,11 +87,11 @@ export default {
     openaskDelete(id) {
       this.itemId = id;
       this.showDelete = true;
-    }
+    },
 
   },
   mounted() {
-    console.log(this.notes);
+    console.log(this.notes)
   },
 }
 </script>
@@ -101,8 +107,8 @@ export default {
     padding: 10px;
   }
   .notes__item {
-    width: 200px;
-    min-height: 230px;
+    width: 280px;
+    min-height: 250px;
     padding: 10px 30px;
     background-color: #445279;
     border-radius: 5px;
@@ -125,7 +131,7 @@ export default {
     background-color: #44AF7C;
     border: none;
     border-radius: 5px;
-    padding: 8px 0;
+    padding: 15px 0;
     text-decoration: none;
     text-align: center;
   }
@@ -145,6 +151,9 @@ export default {
   }
   .notes__btn-chenge:hover {
     opacity: 0.8;
+  }
+  .completed p {
+    text-decoration: line-through;
   }
 
 </style>
