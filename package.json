@@ -15,7 +15,7 @@
     "vue-router": "^3.1.6",
     "vuex": "^3.4.0"
   },
-  "homepage": "https://Timur0076565.github.io/VueSpaApp",
+  "homepage": "https://timur0076565.github.io/VueSpaApp/",
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.3.0",
     "@vue/cli-plugin-eslint": "^4.3.0",
