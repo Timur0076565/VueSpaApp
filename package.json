@@ -5,14 +5,17 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "deploy": "vue-gh-pages -d dist"
   },
   "dependencies": {
     "core-js": "^3.6.4",
     "vue": "^2.6.11",
+    "vue-gh-pages": "^1.19.0",
     "vue-router": "^3.1.6",
     "vuex": "^3.4.0"
   },
+  "homepage": "https://Timur0076565.github.io/VueSpaApp",
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.3.0",
     "@vue/cli-plugin-eslint": "^4.3.0",
