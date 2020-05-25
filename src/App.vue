@@ -1,19 +1,20 @@
 <template>
   <div id="app">
-    <!-- <NavBar /> -->
-    <router-view />
+    <Notes />
+    <!-- <router-view /> -->
   </div>
 </template>
 
 <script>
 // import NavBar from './components/NavBar.vue'
-
+import Notes from './views/Notes.vue'
 
 export default {
+  
   name: 'App',
-  // components: {
-  //   NavBar
-  // }
+  components: {
+    Notes
+  }
 }
 </script>
 
